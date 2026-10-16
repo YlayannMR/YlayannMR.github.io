@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SMSI Orséa Banque · Ylayann Malouda-Ribardiere</title>
+<meta name="description" content="Portfolio d'Ylayann Malouda-Ribardiere, étudiant BTS SIO SISR à Ynov Lille orienté GRC : projet SMSI ISO 27001 / EBIOS RM, certifications et write-ups CTF.">
+<meta name="theme-color" content="#0a0e14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0e14'/><text x='5' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%2300e5a0'>&gt;_</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+<header><div class="wrap"><nav>
+<a class="logo" href="../index.html#top">~/ylayann<span>$</span></a>
+<button class="burger" aria-label="Menu">menu</button>
+<ul><li><a href="../index.html#apropos">À propos</a></li><li><a href="../index.html#competences">Compétences</a></li><li><a href="../index.html#smsi">SMSI</a></li><li><a href="../index.html#ctf">Write-ups</a></li><li><a href="../index.html#contact">Contact</a></li></ul>
+</nav></div></header>
+
+<main class="article">
+<div class="crumbs"><a href="../index.html">~</a> / <a href="../index.html#smsi">projets</a> / smsi</div>
+<div class="head">
+<div class="chips"><span class="chip">iso27001</span><span class="chip">ebios-rm</span></div>
+<h1>Orséa Banque : SMSI ISO 27001 et analyse de risques EBIOS RM</h1>
+<div class="mono" style="color:var(--muted);font-size:.85rem">Projet GRC · 3 min de lecture · <a href="https://github.com/YlayannMR/SMSI_training" target="_blank" rel="noopener">source sur GitHub</a></div>
+</div>
+<p>Projet GRC mené de A à Z sur une néobanque fictive, Orséa Banque :
+analyse de risques, traitement, déclaration d'applicabilité ISO 27001,
+politique de sécurité et présentation au comité exécutif.</p>
+<p>Outil : <a href="https://intuitem.com/ciso-assistant/">CISO
+Assistant</a> (édition communautaire, installé en local avec Docker).
+Référentiels : ISO/IEC 27001:2022, EBIOS Risk Manager (ANSSI), DORA,
+RGPD.</p>
+<h2 id="le-contexte">Le contexte</h2>
+<p>Orséa est une banque en ligne : une appli mobile, une carte, un core
+banking loué à un éditeur, un hébergement chez AWS et un support client
+en partie externalisé. Comme toute banque en France, elle doit respecter
+DORA, le RGPD et les règles anti-blanchiment, sous le contrôle de
+l'ACPR.</p>
+<h2 id="lanalyse-de-risques-ebios-rm">L'analyse de risques (EBIOS
+RM)</h2>
+<p>J'ai suivi les cinq ateliers de la méthode :</p>
+<ul>
+<li>6 valeurs métier et leurs besoins de sécurité (disponibilité,
+intégrité, confidentialité, preuve)</li>
+<li>les attaquants plausibles et leurs objectifs : cybercriminels,
+groupes de rançongiciel, agent interne corrompu, réseaux de
+blanchiment</li>
+<li>6 parties prenantes notées selon le niveau de menace qu'elles
+représentent</li>
+<li>7 scénarios d'attaque détaillés étape par étape (28 actions au
+total)</li>
+<li>une stratégie de traitement pour chaque risque</li>
+</ul>
+<p><img loading="lazy" src="../img/smsi/01-ateliers-ebios-rm.png"
+alt="Les cinq ateliers EBIOS RM dans CISO Assistant" /></p>
+<p><img loading="lazy" src="../img/smsi/02-ecosysteme.png"
+alt="Cartographie de l&#39;écosystème, avant et après mesures" /></p>
+<h2 id="les-résultats">Les résultats</h2>
+<p>Les 7 risques avaient tous la gravité maximale et cinq étaient à un
+niveau élevé. Après le plan de traitement, il n'en reste aucun.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Risque</th>
+<th>Scénario</th>
+<th>Avant</th>
+<th>Stratégie</th>
+<th>Après</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>CA_01</td>
+<td>Fraude aux paiements par phishing des clients</td>
+<td>Élevé</td>
+<td>Réduire</td>
+<td>Moyen</td>
+</tr>
+<tr class="even">
+<td>CA_02</td>
+<td>Piratage du processeur de paiement</td>
+<td>Moyen</td>
+<td>Transférer</td>
+<td>Moyen</td>
+</tr>
+<tr class="odd">
+<td>CA_03</td>
+<td>Rançongiciel via un collaborateur piégé</td>
+<td>Élevé</td>
+<td>Réduire</td>
+<td>Faible</td>
+</tr>
+<tr class="even">
+<td>CA_04</td>
+<td>Rançongiciel via l'éditeur du core banking</td>
+<td>Moyen</td>
+<td>Réduire</td>
+<td>Faible</td>
+</tr>
+<tr class="odd">
+<td>CA_05</td>
+<td>Agent du support corrompu</td>
+<td>Élevé</td>
+<td>Réduire</td>
+<td>Moyen</td>
+</tr>
+<tr class="even">
+<td>CA_06</td>
+<td>Comptes ouverts pour blanchir de l'argent</td>
+<td>Élevé</td>
+<td>Réduire</td>
+<td>Moyen</td>
+</tr>
+<tr class="odd">
+<td>CA_07</td>
+<td>Clients recrutés comme mules</td>
+<td>Élevé</td>
+<td>Réduire</td>
+<td>Moyen</td>
+</tr>
+</tbody>
+</table>
+<p><img loading="lazy" src="../img/smsi/03-matrices-risque.png"
+alt="Matrices de risque avant et après traitement" /></p>
+<p><img loading="lazy" src="../img/smsi/04-scenarios-et-mesures.png"
+alt="Les sept scénarios avec leurs mesures" /></p>
+<h2 id="le-passage-à-iso-27001">Le passage à ISO 27001</h2>
+<p>J'ai évalué les 93 contrôles de l'Annexe A d'ISO 27001:2022 dans une
+déclaration d'applicabilité. Trois sont exclus (7.8, 7.11, 7.12) parce
+qu'Orséa n'a pas de salle serveur : la sécurité physique de
+l'hébergement relève d'AWS et est encadrée par le contrôle 5.23. Sur les
+90 restants, 84 ne sont pas encore en place. C'est normal au démarrage :
+c'est le point de départ du plan.</p>
+<p><img loading="lazy" src="../img/smsi/05-soa-iso27001.png"
+alt="Évaluation ISO 27001 dans CISO Assistant" /></p>
+<h2 id="le-plan-et-la-direction">Le plan et la direction</h2>
+<p>23 mesures, chacune avec un responsable, une priorité, une échéance
+et un coût estimé (environ 805 k€ la première année, chiffre fictif).
+Ensuite, une politique de sécurité (PSSI) en 15 sections et une
+présentation de 8 slides pour le comité exécutif, qui se termine sur les
+quatre décisions demandées.</p>
+<p><img loading="lazy" src="../img/smsi/06-mesures.png"
+alt="Les mesures avec leur priorité et leur échéance" /></p>
+<h2 id="ce-que-je-ferais-différemment">Ce que je ferais
+différemment</h2>
+<ul>
+<li>Au début, je voulais accepter deux risques élevés liés au
+blanchiment. Un risque élevé de gravité maximale, on commence par le
+réduire.</li>
+<li>J'avais mis des mesures pas encore réalisées dans les mesures
+existantes. Le risque actuel paraissait alors plus faible qu'il ne
+l'était.</li>
+<li>Pour l'agent corrompu, j'avais pensé au contrôle d'identité à
+l'ouverture de compte. Contre une menace interne, ce qui marche, c'est
+la gestion des accès : moindre privilège, revue des droits, validation à
+deux personnes.</li>
+</ul>
+<h2 id="livrables">Livrables</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Document</th>
+<th>Fichier</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Présentation au comité exécutif</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/Synthese_COMEX_Orsea_Banque.pdf" target="_blank" rel="noopener">Synthese_COMEX_Orsea_Banque.pdf</a></td>
+</tr>
+<tr class="even">
+<td>Politique de sécurité (PSSI)</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/PSSI_Orsea_Banque.pdf" target="_blank" rel="noopener">PSSI_Orsea_Banque.pdf</a></td>
+</tr>
+<tr class="odd">
+<td>Déclaration d'applicabilité ISO 27001</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/SoA_ISO27001_Orsea_Banque.xlsx" target="_blank" rel="noopener">SoA_ISO27001_Orsea_Banque.xlsx</a></td>
+</tr>
+<tr class="even">
+<td>Plan de traitement</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/Plan_de_traitement_Orsea_Banque.xlsx" target="_blank" rel="noopener">Plan_de_traitement_Orsea_Banque.xlsx</a></td>
+</tr>
+<tr class="odd">
+<td>Atelier 1 : besoins de sécurité (DICP)</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/DICP_Orsea_Banque.xlsx" target="_blank" rel="noopener">DICP_Orsea_Banque.xlsx</a></td>
+</tr>
+<tr class="even">
+<td>Atelier 1 : événements redoutés</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/EBIOS_Atelier1_Evenements_redoutes.xlsx" target="_blank" rel="noopener">EBIOS_Atelier1_Evenements_redoutes.xlsx</a></td>
+</tr>
+<tr class="odd">
+<td>Atelier 2 : sources de risque</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/EBIOS_Atelier2_SR_OV.xlsx" target="_blank" rel="noopener">EBIOS_Atelier2_SR_OV.xlsx</a></td>
+</tr>
+<tr class="even">
+<td>Atelier 3 : écosystème</td>
+<td><a
+href="https://github.com/YlayannMR/SMSI_training/blob/main/livrables/EBIOS_Atelier3_Ecosysteme.xlsx" target="_blank" rel="noopener">EBIOS_Atelier3_Ecosysteme.xlsx</a></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<p>Orséa Banque est une entreprise fictive : les prestataires, les
+chiffres et les budgets sont inventés pour l'exercice.</p>
+
+
+</main>
+<footer><div class="wrap"><span class="mono">© 2026 Ylayann Malouda-Ribardiere</span><span><a href="https://github.com/YlayannMR" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/ylayann-malouda-ribardiere-3a1a89360/" target="_blank" rel="noopener">LinkedIn</a></span></div></footer>
+<script src="../assets/main.js"></script>
+</body>
+</html>

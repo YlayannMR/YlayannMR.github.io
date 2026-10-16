@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ylayann Malouda-Ribardiere · GRC</title>
+<meta name="description" content="Portfolio d'Ylayann Malouda-Ribardiere, étudiant BTS SIO SISR à Ynov Lille orienté GRC : projet SMSI ISO 27001 / EBIOS RM, certifications et write-ups CTF.">
+<meta name="theme-color" content="#0a0e14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0e14'/><text x='5' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%2300e5a0'>&gt;_</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header><div class="wrap"><nav>
+<a class="logo" href="#top">~/ylayann<span>$</span></a>
+<button class="burger" aria-label="Menu">menu</button>
+<ul><li><a href="#apropos">À propos</a></li><li><a href="#competences">Compétences</a></li><li><a href="#smsi">SMSI</a></li><li><a href="#ctf">Write-ups</a></li><li><a href="#contact">Contact</a></li></ul>
+</nav></div></header>
+
+<main id="top">
+<div class="wrap hero">
+<div class="tag">&gt; whoami</div>
+<h1>Ylayann <span>Malouda-Ribardiere</span></h1>
+<div class="role" data-roles='["Futur analyste GRC","ISO 27001 · EBIOS RM","Gouvernance de l\u2019IA · ISO 42001","Étudiant BTS SIO SISR"]'>&gt; <span class="txt">Futur analyste GRC</span><span class="cursor"></span></div>
+<p>Étudiant en BTS SIO option SISR à Ynov Lille, je me spécialise en gouvernance, risques et conformité. J'analyse les risques avec EBIOS RM, je construis des SMSI ISO 27001 et je m'intéresse à la gouvernance de l'IA. Les CTF me servent à comprendre concrètement les chemins d'attaque que mes analyses de risque décrivent.</p>
+<div class="btns">
+<a class="btn primary" href="#smsi">Voir mon projet SMSI</a>
+<a class="btn" href="#ctf">Write-ups CTF</a>
+<a class="btn" href="https://www.linkedin.com/in/ylayann-malouda-ribardiere-3a1a89360/" target="_blank" rel="noopener">LinkedIn</a>
+</div>
+<div class="terminal reveal"><div class="bar"><i></i><i></i><i></i></div>
+<pre><span class="p">ylayann@ynov:~$</span> <span class="v">cat profil.txt</span>
+formation    : BTS SIO option SISR, Ynov Lille
+cible        : GRC · gestion des risques · conformité
+référentiels : ISO 27001 · EBIOS RM · ISO 42001 · DORA · RGPD
+projet       : SMSI complet pour une néobanque fictive
+pratique     : CTF web pour comprendre les chemins d'attaque
+recherche    : alternance GRC 2027
+<span class="p">ylayann@ynov:~$</span> <span class="cursor"></span></pre></div>
+</div>
+
+<section id="apropos"><div class="wrap about">
+<div class="reveal">
+<h2>À propos</h2>
+<p class="sub">Qui je suis et ce que je cherche</p>
+<p>Je suis en BTS SIO option SISR (Solutions d'infrastructure, systèmes et réseaux) à Ynov Lille. Je vise un poste en GRC : traduire les menaces en risques compréhensibles par une direction, puis en mesures concrètes, chiffrées et suivies.</p>
+<p>Mon projet SMSI Orséa Banque m'a fait passer par toutes les étapes, de l'analyse EBIOS RM à la présentation au comité exécutif. En parallèle, je résous des challenges CTF et je les documente : une analyse de risque est meilleure quand on sait comment l'attaque se déroule vraiment.</p>
+<p>Mes stages en support, en automatisation et en développement m'ont donné le terrain technique qui va avec : parc informatique, Linux, Ansible, VMware et intégration d'IA.</p>
+</div>
+<div class="reveal">
+<h3 class="mono" style="color:var(--accent2);font-size:1rem;margin:0 0 18px">$ experiences --list</h3>
+<div class="timeline">
+<div class="item"><strong>AI &amp; LLM Integration Developer Intern</strong><br><small>Ozibe · stage</small><br>Développement web et logiciel, intégration de modèles d'IA dans une application.</div>
+<div class="item"><strong>System Automation &amp; DevOps Intern</strong><br><small>Ezytech · stage</small><br>Automatisation des processus IT avec Ansible, administration Linux, VMware, SSH.</div>
+<div class="item"><strong>IT Support &amp; IAM</strong><br><small>Mairie de Lille · en poste</small><br>Helpdesk, gestion des identités et des accès, gestion de parc informatique et infrastructure.</div>
+<div class="item"><strong>BTS SIO, option SISR</strong><br><small>Ynov Lille · en cours</small><br>Infrastructure, systèmes, réseaux et cybersécurité.</div>
+</div>
+</div>
+</div></section>
+
+<section id="competences"><div class="wrap">
+<h2>Compétences</h2>
+<p class="sub">GRC d'abord, avec le socle technique pour comprendre ce qu'on protège</p>
+<div class="grid">
+<div class="box reveal" style="border-color:rgba(0,229,160,.45)"><h3>$ grc --core</h3><div class="chips"><span class="chip">Analyse de risques</span><span class="chip">EBIOS Risk Manager</span><span class="chip">ISO/IEC 27001</span><span class="chip">Gouvernance, risques et conformité</span><span class="chip">DORA</span><span class="chip">RGPD</span><span class="chip">PSSI</span></div></div>
+<div class="box reveal"><h3>$ grc --ia</h3><div class="chips"><span class="chip">ISO/IEC 42001</span><span class="chip">Politique et régulation de l'IA</span><span class="chip">IA pour la gestion des risques</span><span class="chip">Intelligence artificielle</span></div></div>
+<div class="box reveal"><h3>$ offensif --comprendre</h3><div class="chips"><span class="chip">Test d'intrusion</span><span class="chip">Bug bounty</span><span class="chip">OWASP Top 10</span><span class="chip">Injection SQL</span><span class="chip">IDOR</span><span class="chip">Path Traversal</span></div></div>
+<div class="box reveal"><h3>$ infra --sys --net</h3><div class="chips"><span class="chip">TCP/IP</span><span class="chip">Administration Linux</span><span class="chip">Ansible</span><span class="chip">VMware</span><span class="chip">SSH</span><span class="chip">Automatisation IT</span><span class="chip">Infrastructure</span></div></div>
+<div class="box reveal"><h3>$ support</h3><div class="chips"><span class="chip">Helpdesk</span><span class="chip">IAM</span><span class="chip">Support technique</span><span class="chip">Gestion de parc (GLPI)</span></div></div>
+<div class="box reveal"><h3>$ dev --outils</h3><div class="chips"><span class="chip">Développement web</span><span class="chip">Développement logiciel</span><span class="chip">CISO Assistant</span><span class="chip">Docker</span><span class="chip">Git / GitHub</span></div></div>
+</div>
+</div></section>
+
+<section id="certifs"><div class="wrap">
+<h2>Certifications et formations</h2>
+<p class="sub">Ce que j'ai validé en dehors du BTS</p>
+<div class="grid certs">
+<div class="box reveal"><h3>ISO 42001 AI Governance Fundamentals (I42001AIGF™)</h3><p class="mono">CertiProf · oct. 2026 · valide jusqu'en oct. 2027</p></div>
+<div class="box reveal"><h3>L'atelier RGPD</h3><p class="mono">CNIL · sept. 2026</p></div>
+<div class="box reveal"><h3>CCNA : Introduction to Networks</h3><p class="mono">Cisco · sept. 2026</p></div>
+<div class="box reveal"><h3>Introduction to Cybersecurity</h3><p class="mono">Cisco Networking Academy · sept. 2026</p></div>
+<div class="box reveal"><h3>Formation Cybersécurité &amp; Pentest BlueFaculty</h3><p class="mono">Bluehack · sept. 2026</p></div>
+</div>
+</div></section>
+
+<section id="smsi"><div class="wrap">
+<h2>Projet phare · SMSI Orséa Banque</h2>
+<p class="sub">ISO 27001 et analyse de risques EBIOS RM, menés de A à Z sur une néobanque fictive</p>
+<div class="feature">
+<div class="reveal">
+<p>Analyse de risques EBIOS RM en cinq ateliers, évaluation des 93 contrôles de l'Annexe A d'ISO 27001:2022, plan de traitement chiffré, PSSI en 15 sections et présentation au comité exécutif. Réalisé avec CISO Assistant en local sous Docker.</p>
+<div class="stats"><div><b>7</b>scénarios d'attaque</div><div><b>93</b>contrôles ISO évalués</div><div><b>23</b>mesures de traitement</div><div><b>5 → 0</b>risques élevés</div></div>
+<div class="chips"><span class="chip">ISO 27001</span><span class="chip">EBIOS RM</span><span class="chip">DORA</span><span class="chip">RGPD</span></div>
+<div class="btns"><a class="btn primary" href="projets/smsi.html">Lire le projet</a><a class="btn" href="https://github.com/YlayannMR/SMSI_training/tree/main/livrables" target="_blank" rel="noopener">Livrables</a></div>
+</div>
+<img class="reveal" src="img/smsi/03-matrices-risque.png" alt="Matrices de risque avant et après traitement" loading="lazy">
+</div>
+<p class="sub" style="margin-top:22px;font-size:.88rem">Orséa Banque est une entreprise fictive : les chiffres et budgets sont inventés pour l'exercice.</p>
+</div></section>
+
+<section id="ctf"><div class="wrap">
+<h2>Write-ups CTF</h2>
+<p class="sub">Je résous des challenges pour comprendre les chemins d'attaque que j'évalue en analyse de risque. <a href="https://github.com/YlayannMR/ctf-writeups" target="_blank" rel="noopener">Le dépôt complet sur GitHub →</a></p>
+<div class="filters"><button class="on" data-f="all">tous</button><button data-f="sqli">sqli</button><button data-f="idor">idor</button><button data-f="path-traversal">path-traversal</button></div>
+<div class="grid">
+<!-- CARDS -->
+<a class="card reveal" href="writeups/sqli.html" data-tags="web sqli">
+<div class="thumb" style="background-image:url('img/sqli/06-dump-credentials.png')"></div>
+<div class="body"><div class="meta"><span>Cisco Ethical Hacker</span><span class="lvl easy">Facile</span></div>
+<h3>Injection SQL sur DVWA</h3><p>D&#x27;un simple champ « User ID » jusqu&#x27;à l&#x27;extraction des identifiants de tous les comptes, en UNION-based.</p>
+<div class="meta"><div class="chips"><span class="chip">web</span><span class="chip">sqli</span></div><span>5 min</span></div></div></a>
+<a class="card reveal" href="writeups/idor.html" data-tags="web idor">
+<div class="thumb" style="background-image:url('img/idor/02-admin-via-idor.png')"></div>
+<div class="body"><div class="meta"><span>BlueFaculty</span><span class="lvl easy">Facile</span></div>
+<h3>IDOR sur BluePortal</h3><p>Un mot de passe faible, un paramètre id=2 changé en id=1, et me voilà admin.</p>
+<div class="meta"><div class="chips"><span class="chip">web</span><span class="chip">idor</span></div><span>4 min</span></div></div></a>
+<a class="card reveal" href="writeups/path.html" data-tags="web path-traversal">
+<div class="thumb" style="background-image:url('img/path/02-path-traversal-flag.png')"></div>
+<div class="body"><div class="meta"><span>BlueFaculty</span><span class="lvl easy">Facile</span></div>
+<h3>Path Traversal sur File Viewer</h3><p>Lire des fichiers hors du dossier prévu grâce à un paramètre d&#x27;URL mal contrôlé.</p>
+<div class="meta"><div class="chips"><span class="chip">web</span><span class="chip">path-traversal</span></div><span>3 min</span></div></div></a>
+<!-- /CARDS -->
+</div>
+</div></section>
+
+<section id="contact"><div class="wrap">
+<h2>Contact</h2>
+<p class="sub">Je cherche une alternance en GRC pour 2027, en gouvernance de l'IA et conformité. Écris-moi sur LinkedIn.</p>
+<div class="btns">
+<a class="btn primary" href="https://www.linkedin.com/in/ylayann-malouda-ribardiere-3a1a89360/" target="_blank" rel="noopener">LinkedIn</a>
+<a class="btn" href="https://github.com/YlayannMR" target="_blank" rel="noopener">GitHub</a>
+</div>
+</div></section>
+</main>
+<footer><div class="wrap"><span class="mono">© 2026 Ylayann Malouda-Ribardiere</span><span><a href="https://github.com/YlayannMR" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/ylayann-malouda-ribardiere-3a1a89360/" target="_blank" rel="noopener">LinkedIn</a></span></div></footer>
+<script src="assets/main.js"></script>
+</body>
+</html>

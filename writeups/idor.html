@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IDOR sur BluePortal · Ylayann Malouda-Ribardiere</title>
+<meta name="description" content="Portfolio d'Ylayann Malouda-Ribardiere, étudiant BTS SIO SISR à Ynov Lille orienté GRC : projet SMSI ISO 27001 / EBIOS RM, certifications et write-ups CTF.">
+<meta name="theme-color" content="#0a0e14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0e14'/><text x='5' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%2300e5a0'>&gt;_</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+<header><div class="wrap"><nav>
+<a class="logo" href="../index.html#top">~/ylayann<span>$</span></a>
+<button class="burger" aria-label="Menu">menu</button>
+<ul><li><a href="../index.html#apropos">À propos</a></li><li><a href="../index.html#competences">Compétences</a></li><li><a href="../index.html#smsi">SMSI</a></li><li><a href="../index.html#ctf">Write-ups</a></li><li><a href="../index.html#contact">Contact</a></li></ul>
+</nav></div></header>
+
+<main class="article">
+<div class="crumbs"><a href="../index.html">~</a> / <a href="../index.html#ctf">write-ups</a> / idor</div>
+<div class="head">
+<div class="chips"><span class="chip">web</span><span class="chip">idor</span></div>
+<h1>IDOR sur BluePortal (BlueFaculty - CH04)</h1>
+<div class="mono" style="color:var(--muted);font-size:.85rem">BlueFaculty · Facile · 4 min de lecture · <a href="https://github.com/YlayannMR/ctf-writeups/tree/main/bluefaculty/ch04-idor" target="_blank" rel="noopener">source sur GitHub</a></div>
+</div>
+<p>Petit challenge sympa sur les IDOR, un classique du Top 10 OWASP mais
+toujours aussi efficace pour comprendre pourquoi le contrôle d'accès
+côté serveur n'est pas une option.</p>
+<p><img loading="lazy" src="../img/idor/01-challenge-brief.png"
+alt="Énoncé du challenge" /></p>
+<h2 id="le-contexte">Le contexte</h2>
+<p>BluePortal est une appli de démo avec plusieurs comptes utilisateurs.
+L'énoncé donne un indice assez gros : un des comptes,
+<code>user2</code>, aurait un mot de passe faible, potentiellement
+identique à son login. Classique, mais ça reste la porte d'entrée la
+plus fréquente en vrai en entreprise aussi, les mots de passe par défaut
+jamais changés, c'est un grand classique des audits.</p>
+<h2 id="premier-accès">Premier accès</h2>
+<p>J'ai testé le plus simple possible :</p>
+<pre><code>login: user2
+password: user2</code></pre>
+<p>Ça passe direct. Aucune politique de mot de passe, aucun blocage
+après tentative. Sur une vraie appli en prod ça serait déjà un finding à
+remonter en soi.</p>
+<h2 id="repérer-le-paramètre">Repérer le paramètre</h2>
+<p>Une fois dedans, je regarde la page de profil. Il y a un paramètre
+<code>id</code> qui traîne dans la requête : <code>id=2</code>. Rien
+d'exotique, c'est le genre de truc qu'on croise sur 90% des applis qui
+gèrent des comptes utilisateurs. Le réflexe à avoir dès qu'on voit un
+identifiant numérique comme ça : est-ce que le serveur vérifie vraiment
+que je suis autorisé à demander CET id précis, ou est-ce qu'il fait
+juste "ok tu veux l'id X, tiens voilà les données de l'id X" sans se
+poser de questions ?</p>
+<p>Un seul moyen de savoir : tester.</p>
+<h2 id="lexploitation">L'exploitation</h2>
+<p>Je change <code>id=2</code> en <code>id=1</code>, comme ça, à la main
+dans l'URL.</p>
+<p>Et là, ça passe. Le serveur me renvoie le profil complet du compte
+<code>admin</code>, alors que ma session est toujours celle de
+<code>user2</code> (c'est écrit noir sur blanc dans la page : "Viewer:
+user2"). Ça confirme exactement ce qu'on soupçonnait : l'app fait
+confiance à l'id fourni par le client, point. Pas de vérification
+"est-ce que l'utilisateur en session a le droit de voir CE profil".</p>
+<p><img loading="lazy" src="../img/idor/02-admin-via-idor.png"
+alt="Profil admin accessible via IDOR (session user2)" /></p>
+<p>Le flag tombe dans la foulée :</p>
+<pre><code>FLAG{4a8e5c2b90d34f11a3bcd7689e4205fa}</code></pre>
+<h2 id="pourquoi-ça-marche">Pourquoi ça marche</h2>
+<p>C'est le cœur même de l'IDOR : une référence directe à un objet (ici
+un <code>id</code> de profil) exposée au client, sans couche
+d'autorisation derrière. Le développeur a probablement codé quelque
+chose comme :</p>
+<pre><code>GET /profile?id=X
+→ retourne les données du profil X, sans plus de vérification</code></pre>
+<p>Alors qu'il aurait fallu :</p>
+<pre><code>GET /profile?id=X
+→ est-ce que session.user_id a le droit de voir le profil X ?
+→ si non : 403
+→ si oui : retourne les données</code></pre>
+<p>Cette vérification manque, et c'est tout ce qu'il faut pour qu'un
+utilisateur lambda se retrouve à consulter les données d'un admin juste
+en changeant un chiffre dans l'URL.</p>
+<h2 id="ce-que-je-retiens">Ce que je retiens</h2>
+<p>Deux petites faiblesses combinées ici : un mot de passe trivial pour
+rentrer, et un contrôle d'accès absent une fois dedans. Prises
+séparément, chacune semble presque anecdotique. Ensemble, ça donne un
+accès admin complet en trente secondes sans le moindre outil.</p>
+<p>Le réflexe à garder pour la suite : dès que je vois un
+<code>id</code>, <code>uid</code>, <code>user_id</code>,
+<code>account_id</code> ou équivalent dans une requête, je teste
+systématiquement l'incrémentation/décrémentation avant de passer à autre
+chose. C'est souvent le test le plus rapide à faire et il paie
+régulièrement, y compris sur des applis censées être "sérieuses".</p>
+<h2 id="comment-se-protéger">Comment se protéger</h2>
+<ul>
+<li><strong>Contrôle d'accès côté serveur, à chaque requête</strong> :
+ne jamais se fier à un <code>id</code> fourni par le client. Vérifier
+que la session a bien le droit de lire / modifier <em>cet</em> objet
+précis (ownership ou rôle), sinon renvoyer <code>403</code>.</li>
+<li><strong>Ne pas s'appuyer sur l'obscurité des IDs</strong> : même
+avec des UUID, l'autorisation reste obligatoire. Les IDs séquentiels
+facilitent juste la découverte ; ce n'est pas la cause racine.</li>
+<li><strong>Mots de passe solides + politique minimale</strong> :
+interdire les mots de passe égaux au login, imposer une longueur /
+complexité raisonnable, et limiter les tentatives (rate limiting /
+lockout).</li>
+<li><strong>Tests automatisés d'accès</strong> : écrire des tests qui
+vérifient qu'un user A ne peut pas accéder aux ressources de user B (et
+encore moins à celles d'un admin).</li>
+<li><strong>Principe du moindre privilège</strong> : ne renvoyer dans
+les réponses que les champs nécessaires ; un profil "admin" ne devrait
+pas exposer un secret / flag à un viewer non autorisé.</li>
+</ul>
+<hr />
+<p><em>Outils : navigateur uniquement, modification manuelle du
+paramètre d'URL, pas besoin de Burp pour celui-là.</em></p>
+
+<div class="nextprev"><a class="btn" href="sqli.html">← Injection SQL sur DVWA</a><a class="btn" href="path.html">Path Traversal sur File Viewer →</a></div>
+</main>
+<footer><div class="wrap"><span class="mono">© 2026 Ylayann Malouda-Ribardiere</span><span><a href="https://github.com/YlayannMR" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/ylayann-malouda-ribardiere-3a1a89360/" target="_blank" rel="noopener">LinkedIn</a></span></div></footer>
+<script src="../assets/main.js"></script>
+</body>
+</html>

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """Génère les pages write-ups et projets à partir des README de tes dépôts GitHub.
 
-Usage : python3 build.py <dossier ctf-writeups> <dossier SMSI_training>
+Usage : python3 build.py <dossier ctf-writeups> <dossier SMSI_training> <dossier AI-risk-assessment>
 Nécessite pandoc. Les images sont copiées dans img/<slug>/.
 """
 import html, re, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).parent
-CTF, SMSI = Path(sys.argv[1]), Path(sys.argv[2])
+CTF, SMSI, IA = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
 
 # Ordre d'affichage = ordre de cette liste. Pour ajouter un write-up, ajoute une ligne.
 WRITEUPS = [
@@ -26,6 +26,9 @@ PROJETS = [
     dict(slug="smsi", src=SMSI, gh="SMSI_training", short="SMSI Orséa Banque",
          platform="Projet GRC", tags=["iso27001", "ebios-rm"], level=None,
          blob="https://github.com/YlayannMR/SMSI_training/blob/main/"),
+    dict(slug="ia", src=IA, gh="AI-risk-assessment", short="IA Orséa Banque : ISO 42001",
+         platform="Projet GRC", tags=["iso42001", "ai-act"], level=None,
+         blob="https://github.com/YlayannMR/AI-risk-assessment/blob/main/"),
 ]
 
 HEAD = (ROOT / "partials/head.html").read_text()
@@ -42,7 +45,7 @@ def render(item, kind, prev=None, nxt=None):
     body = body.replace('src="images/', f'src="../img/{item["slug"]}/')
     body = re.sub(r'<img ', '<img loading="lazy" ', body)
     if item.get("blob"):  # liens vers les livrables -> GitHub
-        body = re.sub(r'href="(livrables/[^"]+)"', lambda m: f'href="{item["blob"]}{m.group(1)}" target="_blank" rel="noopener"', body)
+        body = re.sub(r'href="((?:livrables|aims|smsi)/[^"]*)"', lambda m: f'href="{item["blob"]}{m.group(1)}" target="_blank" rel="noopener"', body)
     words = len(re.sub(r"<[^>]+>", " ", body).split())
     minutes = max(1, round(words / 200))
     img = item["src"] / "images"
@@ -65,7 +68,7 @@ def render(item, kind, prev=None, nxt=None):
 <body>
 {NAV.replace("{{base}}", "../index.html")}
 <main class="article">
-<div class="crumbs"><a href="../index.html">~</a> / <a href="../index.html#{"ctf" if kind == "writeups" else "smsi"}">{section.lower()}</a> / {item["slug"]}</div>
+<div class="crumbs"><a href="../index.html">~</a> / <a href="../index.html#{"ctf" if kind == "writeups" else item["slug"]}">{section.lower()}</a> / {item["slug"]}</div>
 <div class="head">
 <div class="chips">{chips}</div>
 <h1>{html.escape(title)}</h1>

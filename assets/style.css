@@ -118,3 +118,4 @@ footer a{color:var(--muted)}
 }
 .certs .box h3{color:var(--text);font-family:inherit;font-size:1rem;margin-bottom:6px}
 .certs .box p{margin:0;color:var(--muted);font-size:.8rem}
+.cert-link{display:inline-flex;align-items:center;min-height:44px;margin-top:6px;font-family:var(--mono);font-size:.8rem;color:var(--accent)}

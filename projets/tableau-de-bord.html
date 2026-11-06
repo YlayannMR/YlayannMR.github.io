@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableau de bord du SMSI · Ylayann Malouda-Ribardiere</title>
+<meta name="description" content="Portfolio d'Ylayann Malouda-Ribardiere, étudiant BTS SIO SISR à Ynov Lille orienté GRC : projets SMSI ISO 27001 / EBIOS RM et IA ISO 42001, certifications et write-ups CTF.">
+<meta name="theme-color" content="#0a0e14">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%230a0e14'/><text x='5' y='22' font-family='monospace' font-size='16' font-weight='700' fill='%2300e5a0'>&gt;_</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+
+<body>
+<header><div class="wrap"><nav>
+<a class="logo" href="../index.html#top">~/ylayann<span>$</span></a>
+<button class="burger" aria-label="Menu">menu</button>
+<ul><li><a href="../index.html#apropos">À propos</a></li><li><a href="../index.html#competences">Compétences</a></li><li><a href="../index.html#smsi">SMSI</a></li><li><a href="../index.html#ia">IA</a></li><li><a href="../index.html#outils">Conformité</a></li><li><a href="../index.html#ctf">Write-ups</a></li><li><a href="../index.html#contact">Contact</a></li></ul>
+</nav></div></header>
+
+<style>
+.cov{font-family:var(--mono);font-size:.78rem;padding:2px 8px;border-radius:999px;white-space:nowrap;border:1px solid}
+.cov.ok{color:var(--accent);border-color:rgba(0,229,160,.5)}.cov.part{color:var(--warn);border-color:rgba(255,180,84,.5)}.cov.gap{color:var(--danger);border-color:rgba(255,107,107,.5)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin:24px 0}
+.kpis div{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px;color:var(--muted);font-size:.82rem}
+.kpis b{display:block;font-family:var(--mono);font-size:1.7rem;color:var(--accent);line-height:1.15}
+.bars{margin:14px 0 26px}.bars .r{display:grid;grid-template-columns:150px 1fr 60px;gap:10px;align-items:center;margin:8px 0;font-size:.88rem;color:#c3d1e0}
+.bars .t{background:var(--panel2);border:1px solid var(--line);border-radius:6px;height:18px;overflow:hidden;display:flex}
+.bars .t i{display:block;height:100%}.bars .v{font-family:var(--mono);color:var(--muted);font-size:.82rem;text-align:right}
+.lg{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--muted)}.lg span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;background:var(--c)}
+@media(max-width:560px){.bars .r{grid-template-columns:96px 1fr 48px}}
+</style>
+<main class="article">
+<div class="crumbs"><a href="../index.html">~</a> / <a href="../index.html#outils">projets</a> / tableau-de-bord</div>
+<div class="head"><div class="chips"><span class="chip">iso27001</span><span class="chip">kpi</span><span class="chip">pilotage</span></div><h1>Tableau de bord du SMSI</h1>
+<div class="mono" style="color:var(--muted);font-size:.85rem">Projet GRC · Orséa Banque · clause 9.1 · <a href="smsi.html">voir le SMSI</a></div></div>
+<p>Le tableau de bord que le RSSI d'Orséa Banque présente chaque trimestre au comité sécurité, puis au COMEX (clause 9.1 d'ISO 27001). Il montre le point de départ, en octobre 2026, avant la mise en œuvre du plan de traitement : c'est la photo sur laquelle on mesurera les progrès.</p>
+<div class="kpis"><div><b>5 → 0</b>risques élevés après traitement</div><div><b>90 / 93</b>contrôles applicables</div><div><b>21</b>mesures planifiées</div><div><b>805 k€</b>budget an 1 estimé</div><div><b>12</b>indicateurs suivis</div></div>
+<h2>Niveau des risques, avant et après traitement</h2>
+<p>Sept scénarios issus de l'analyse EBIOS RM. Les cinq risques élevés redescendent à moyen ou faible, et chaque risque résiduel a été accepté par son propriétaire.</p>
+<div class="bars"><div class="r"><span>Avant traitement</span><div class="t"><i style="width:71.4%;background:var(--danger)"></i><i style="width:28.6%;background:var(--warn)"></i></div><span class="v">7</span></div><div class="r"><span>Après traitement</span><div class="t"><i style="width:71.4%;background:var(--warn)"></i><i style="width:28.6%;background:var(--accent)"></i></div><span class="v">7</span></div></div>
+<div class="lg"><span style="--c:var(--danger)">Élevé</span><span style="--c:var(--warn)">Moyen</span><span style="--c:var(--accent)">Faible</span></div>
+<h2>État initial de l'Annexe A</h2>
+<p>Au départ, seuls 6 contrôles sur 90 applicables sont partiellement en place. Trois contrôles physiques sont exclus : Orséa n'a pas de salle serveur, son infrastructure est hébergée chez un fournisseur cloud.</p>
+<div class="bars"><div class="r"><span>5 – Organisationnel</span><div class="t"><i style="width:13.5%;background:var(--warn)"></i><i style="width:86.5%;background:var(--danger)"></i></div><span class="v">37</span></div><div class="r"><span>6 – Personnes</span><div class="t"><i style="width:100.0%;background:var(--danger)"></i></div><span class="v">8</span></div><div class="r"><span>7 – Physique</span><div class="t"><i style="width:78.6%;background:var(--danger)"></i><i style="width:21.4%;background:var(--line)"></i></div><span class="v">14</span></div><div class="r"><span>8 – Technologique</span><div class="t"><i style="width:2.9%;background:var(--warn)"></i><i style="width:97.1%;background:var(--danger)"></i></div><span class="v">34</span></div></div>
+<div class="lg"><span style="--c:var(--warn)">Partiellement conforme</span><span style="--c:var(--danger)">Non conforme</span><span style="--c:var(--line)">Exclu</span></div>
+<h2>Plan de traitement par priorité</h2>
+<p>Les 12 mesures P1 représentent 71 % du budget : ce sont celles qui font baisser les risques élevés (MFA, EDR, sauvegardes immuables, détection des connexions, clauses DORA).</p>
+<div class="bars"><div class="r"><span>P1 · 575 k€</span><div class="t"><i style="width:100.0%;background:var(--danger)"></i></div><span class="v">12</span></div><div class="r"><span>P2 · 220 k€</span><div class="t"><i style="width:66.7%;background:var(--warn)"></i><i style="width:33.3%;background:transparent"></i></div><span class="v">8</span></div><div class="r"><span>P3 · 10 k€</span><div class="t"><i style="width:8.3%;background:var(--accent)"></i><i style="width:91.7%;background:transparent"></i></div><span class="v">1</span></div></div>
+<h2>Indicateurs de pilotage</h2>
+<p>Chaque indicateur a une formule, une source, un responsable et un lien avec un objectif de sécurité. Un indicateur hors cible deux périodes de suite déclenche une action corrective.</p>
+<table><thead><tr><th>Id</th><th>Indicateur</th><th>Départ</th><th>Cible</th><th>Fréquence</th></tr></thead><tbody><tr><td class="mono">KPI-01</td><td>Avancement des mesures prioritaires</td><td>0 / 12</td><td>12 / 12 au 31/03/2027</td><td>Mensuelle</td></tr><tr><td class="mono">KPI-02</td><td>Risques résiduels élevés</td><td>5</td><td>0</td><td>Trimestrielle</td></tr><tr><td class="mono">KPI-03</td><td>Couverture MFA des comptes à privilèges</td><td>Non mesuré</td><td>100 %</td><td>Mensuelle</td></tr><tr><td class="mono">KPI-04</td><td>Taux de clic au phishing</td><td>Non mesuré</td><td>moins de 5 %</td><td>Trimestrielle</td></tr><tr><td class="mono">KPI-05</td><td>Tests de restauration réussis</td><td>0 test</td><td>4 par an, 100 % réussis</td><td>Trimestrielle</td></tr><tr><td class="mono">KPI-06</td><td>Incidents majeurs notifiés dans les délais</td><td>Pas de procédure</td><td>100 %</td><td>À chaque incident</td></tr><tr><td class="mono">KPI-07</td><td>Contrats critiques conformes à DORA (art. 30)</td><td>0 / 5</td><td>5 / 5</td><td>Trimestrielle</td></tr><tr><td class="mono">KPI-08</td><td>Revues des habilitations réalisées</td><td>0 / 4</td><td>4 / 4 par an</td><td>Trimestrielle</td></tr><tr><td class="mono">KPI-09</td><td>Délai de déclaration Tracfin</td><td>Non mesuré</td><td>moins de 30 jours</td><td>Mensuelle</td></tr><tr><td class="mono">KPI-10</td><td>Couverture EDR</td><td>0 %</td><td>100 %</td><td>Mensuelle</td></tr><tr><td class="mono">KPI-11</td><td>Contrôles de l'Annexe A en place</td><td>0 / 90</td><td>En hausse chaque trimestre</td><td>Trimestrielle</td></tr><tr><td class="mono">KPI-12</td><td>Non-conformités ouvertes depuis plus de 90 jours</td><td>0</td><td>0</td><td>Mensuelle</td></tr></tbody></table>
+<blockquote>Orséa Banque est une entreprise fictive : chiffres et budgets sont inventés pour l'exercice. Sources : <a href="https://github.com/YlayannMR/SMSI_training/blob/main/smsi/05-indicateurs.md" target="_blank" rel="noopener">SMSI-05 Indicateurs</a>, <a href="https://github.com/YlayannMR/SMSI_training/tree/main/livrables" target="_blank" rel="noopener">SoA, plan de traitement et atelier 5 EBIOS RM</a>.</blockquote>
+</main>
+<footer><div class="wrap"><span class="mono">© 2026 Ylayann Malouda-Ribardiere</span><span><a href="https://github.com/YlayannMR" target="_blank" rel="noopener">GitHub</a> · <a href="https://www.linkedin.com/in/ylayann-malouda-ribardiere-3a1a89360/" target="_blank" rel="noopener">LinkedIn</a></span></div></footer>
+<script src="../assets/main.js"></script>
+</body>
+</html>
